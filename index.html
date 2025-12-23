@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Couch Chaos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">CC</div>
+      <div>
+        <div class="title">Couch Chaos</div>
+        <div class="subtitle">dice-powered streaming chaos for two</div>
+      </div>
+    </div>
+    <div class="player-display">
+      <div class="player" id="player1-display"></div>
+      <div class="player" id="player2-display"></div>
+      <button class="ghost" id="open-settings">Settings</button>
+    </div>
+  </header>
 
+  <main id="app"></main>
+
+  <div class="modal" id="how-modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close" data-close-modal>&times;</button>
+      <h2>How to Play</h2>
+      <p>Couch Chaos is a couch-friendly party game. Each turn, pick a mode or roll one, then follow the prompts. The app rolls genres, tones, timers, and jump methods so you can focus on laughing.</p>
+      <ol>
+        <li>Set player names and options in Settings.</li>
+        <li>Hit Start Turn, choose Mode-First or Content-First.</li>
+        <li>Roll a mode (or pick one), then roll the required prompts.</li>
+        <li>Use the checklist and trackers to run the turn.</li>
+        <li>Tap End Turn to log the summary and swap players.</li>
+      </ol>
+      <p class="tip">Tip: enable seeded randomness to replay the same chaotic night.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="settings-modal" aria-hidden="true">
+    <div class="modal-content wide">
+      <button class="close" data-close-modal>&times;</button>
+      <h2>Settings</h2>
+      <form id="settings-form">
+        <div class="field-grid">
+          <label>Player 1 Name
+            <input type="text" id="player1-name" required>
+          </label>
+          <label>Player 2 Name
+            <input type="text" id="player2-name" required>
+          </label>
+          <label class="checkbox"><input type="checkbox" id="scoring-toggle"> Enable scoring</label>
+          <label class="checkbox"><input type="checkbox" id="mode-first-default"> Default to Mode-First</label>
+        </div>
+
+        <div class="field-grid">
+          <label class="checkbox"><input type="checkbox" id="seeded-toggle"> Use seeded randomness</label>
+          <label>Seed word
+            <input type="text" id="seed-word" placeholder="chaos" maxlength="20">
+          </label>
+          <label class="checkbox"><input type="checkbox" id="content-first-default"> Default Content-First (overrides mode default)</label>
+        </div>
+
+        <div class="services">
+          <h3>Services to include</h3>
+          <div id="service-checkboxes" class="chips"></div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary">Save</button>
+          <button type="button" class="ghost" id="reset-game">Reset Game</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <template id="dice-result-template">
+    <div class="die">d<span class="sides"></span>: <span class="value"></span></div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
