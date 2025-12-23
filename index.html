@@ -1,1 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Couch Chaos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="branding">
+      <span class="logo">Couch Chaos</span>
+      <span class="tagline">dice-powered streaming chaos for two</span>
+    </div>
+    <div class="header-actions">
+      <button class="text-button" id="howToPlayBtn">How to Play</button>
+      <button class="text-button" id="settingsNavBtn">Settings</button>
+      <button class="text-button danger" id="resetBtn">Reset Game</button>
+    </div>
+  </header>
 
+  <main>
+    <section id="startScreen" class="screen active">
+      <div class="hero">
+        <h1>Couch Chaos</h1>
+        <p class="subtitle">A couch-friendly party game that turns any streaming service into a playground.</p>
+        <div class="hero-actions">
+          <button class="primary" id="startTurnBtn">Start Turn</button>
+          <button class="secondary" id="gotoSettingsBtn">Settings</button>
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="card">
+          <h3>Pick or Roll a Mode</h3>
+          <p>Each mode tweaks how you watch: predictions, drafts, voiceovers, and more.</p>
+        </div>
+        <div class="card">
+          <h3>Roll Prompts</h3>
+          <p>Services, genres, tones, settings, timers, and jump methods keep every round fresh.</p>
+        </div>
+        <div class="card">
+          <h3>Two-Player Friendly</h3>
+          <p>Optional scoring, quick turn summaries, and trackers for modes that need them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen">
+      <h2>Settings</h2>
+      <form id="settingsForm" class="form-grid">
+        <div class="form-group">
+          <label for="player1Input">Player 1 Name</label>
+          <input id="player1Input" type="text" placeholder="Player 1">
+        </div>
+        <div class="form-group">
+          <label for="player2Input">Player 2 Name</label>
+          <input id="player2Input" type="text" placeholder="Player 2">
+        </div>
+        <div class="form-group inline">
+          <label><input type="checkbox" id="scoringToggle"> Enable scoring</label>
+        </div>
+        <div class="form-group inline">
+          <label><input type="checkbox" id="seedToggle"> Use seeded rolls</label>
+          <input id="seedInput" type="text" placeholder="seed word" maxlength="20">
+        </div>
+        <div class="form-group inline">
+          <label><input type="checkbox" id="contentFirstToggle"> Content-first by default</label>
+        </div>
+        <div class="form-group">
+          <label>Services to include</label>
+          <div id="serviceCheckboxes" class="pill-grid"></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="primary">Save Settings</button>
+          <button type="button" class="secondary" id="backToStartBtn">Back</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="modeSelectScreen" class="screen">
+      <div class="split">
+        <div>
+          <h2>Choose a Mode</h2>
+          <p class="muted">Mode-first by default. Toggle content-first if you want to roll service & search first.</p>
+          <label class="switch"><input type="checkbox" id="turnContentFirst"><span>Content-first this turn</span></label>
+          <div class="mode-actions">
+            <button class="primary" id="rollRandomMode">Roll a Random Mode</button>
+            <button class="secondary" id="backToStartBtn2">Back</button>
+          </div>
+        </div>
+        <div class="scoreboard" id="scoreboard"></div>
+      </div>
+      <div class="mode-list" id="modeList"></div>
+    </section>
+
+    <section id="modeDetailScreen" class="screen">
+      <div class="split">
+        <div>
+          <p class="muted" id="turnMeta"></p>
+          <h2 id="modeTitle"></h2>
+          <p id="modeDescription" class="muted"></p>
+          <div id="modeBadges" class="badge-row"></div>
+        </div>
+        <div class="scoreboard" id="scoreboardActive"></div>
+      </div>
+
+      <div class="card" id="rollsCard">
+        <h3>Rolls & Prompts</h3>
+        <div id="rollsContainer" class="rolls-grid"></div>
+        <div id="diceTray" class="dice-tray"></div>
+      </div>
+
+      <div class="card" id="stepsCard">
+        <h3>Checklist</h3>
+        <ol id="modeSteps" class="step-list"></ol>
+        <div id="specialRule" class="special"></div>
+        <div id="revealOptions" class="info-banner hidden">Reveal Options: jump to final scene, or skim a summary for the payoff.</div>
+        <div id="lensRoll" class="info-banner hidden"></div>
+      </div>
+
+      <div class="card hidden" id="firstImpressionTracker">
+        <h3>First Impression Tracker</h3>
+        <form id="addCharacterForm" class="inline-form">
+          <input type="text" id="characterNameInput" placeholder="Character name" required>
+          <input type="text" id="p1PredictionInput" placeholder="Player 1 prediction" required>
+          <input type="text" id="p2PredictionInput" placeholder="Player 2 prediction" required>
+          <button type="submit" class="primary">Add Character</button>
+        </form>
+        <div id="characterList" class="tracker-list"></div>
+      </div>
+
+      <div class="card hidden" id="characterDraftTracker">
+        <h3>Character Draft</h3>
+        <form id="addDraftForm" class="inline-form">
+          <input type="text" id="draftNameInput" placeholder="Character name" required>
+          <select id="draftOwnerInput">
+            <option value="p1">Player 1</option>
+            <option value="p2">Player 2</option>
+          </select>
+          <button type="submit" class="primary">Draft Character</button>
+        </form>
+        <div class="muted small">Actions: Lie, yell, cry, reveal secret, bad decision, win/lose confrontation.</div>
+        <div id="draftList" class="tracker-list"></div>
+      </div>
+
+      <div class="actions">
+        <button class="secondary hidden" id="nextSegmentBtn">Next Segment</button>
+        <button class="primary" id="endTurnBtn">End Turn</button>
+      </div>
+    </section>
+
+    <section id="endTurnScreen" class="screen">
+      <h2>Turn Summary</h2>
+      <div id="turnSummary" class="summary"></div>
+      <div class="actions">
+        <button class="primary" id="nextTurnBtn">Next Turn</button>
+        <button class="secondary" id="backHomeBtn">Home</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="modalOverlay" class="modal hidden">
+    <div class="modal-content">
+      <h3>How to Play</h3>
+      <p>Pick or roll a mode, follow the prompts, and let chaos ensue. Each turn rolls the ingredients you need to make watching feel like a mini-challenge.</p>
+      <ul>
+        <li>Mode-first (default) rolls only what that mode needs.</li>
+        <li>Content-first rolls a service and search prompt before the mode.</li>
+        <li>Use the dice tray to see exactly how timers were rolled.</li>
+        <li>Score keeping is optional—toggle it on in Settings.</li>
+        <li>Everything saves locally so you can jump back in anytime.</li>
+      </ul>
+      <button class="primary" id="closeModalBtn">Got it</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
